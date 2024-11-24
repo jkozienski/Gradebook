@@ -18,7 +18,7 @@ public class Grade {
     /**
      * Subject for which the grade is given.
      */
-    private String subject;
+    private Subject subject;
 
     /**
      * Numeric value of the grade.
@@ -39,7 +39,7 @@ public class Grade {
      * @throws InvalidGradeException if the grade value is outside the valid
      * range
      */
-    public Grade(String subject, double value, String submissionDate) throws InvalidGradeException {
+    public Grade(Subject subject, double value, String submissionDate) throws InvalidGradeException {
         if (value < 1.0 || value > 6.0) {
             throw new InvalidGradeException("Ocena moze wynosic miedzy 1.0 a 6.0!");
         }

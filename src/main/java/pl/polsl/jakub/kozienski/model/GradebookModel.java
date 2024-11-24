@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package pl.polsl.jakub.kozienski.model;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.*;
 /**
  *
@@ -42,7 +44,7 @@ public class GradebookModel {
      * @param operationDescription
      */
     public void addOperationHistory(String operationDescription) {
-        operationHistoryList.add(new OperationHistory(operationDescription));
+        operationHistoryList.add(new OperationHistory(operationDescription, LocalDateTime.now()));
     }
 
     /**
@@ -95,7 +97,7 @@ public class GradebookModel {
      * @param submissionDate the date of submission
      * @param assignmentTitle the title of the assignment
      */
-    public void addGradeAssignmentToStudent(int studentId, String subject, double value, String submissionDate, String assignmentTitle) {
+    public void addGradeAssignmentToStudent(int studentId, Subject subject, double value, String submissionDate, String assignmentTitle) {
         Student student = getStudentById(studentId);
         if (student != null) {
             try {
@@ -119,7 +121,7 @@ public class GradebookModel {
      * @param maxPoints the maximum points possible on the exam
      * @param pointsScored the points scored by the student
      */
-    public void addGradeExamToStudent(int studentId, String subject, double value, String submissionDate, String examType, int maxPoints, int pointsScored) {
+    public void addGradeExamToStudent(int studentId, Subject subject, double value, String submissionDate, String examType, int maxPoints, int pointsScored) {
         Student student = getStudentById(studentId);
         if (student != null) {
             try {

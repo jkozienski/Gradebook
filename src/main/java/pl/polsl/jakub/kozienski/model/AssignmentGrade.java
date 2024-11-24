@@ -33,7 +33,7 @@ public class AssignmentGrade extends Grade {
      * @param assignmentTitle The title of the assignment.
      * @throws InvalidGradeException if the grade is invalid.
      */
-    public AssignmentGrade(String subject, double value, String submissionDate, String assignmentTitle) throws InvalidGradeException {
+    public AssignmentGrade(Subject subject, double value, String submissionDate, String assignmentTitle) throws InvalidGradeException {
         super(subject, value, submissionDate);
         this.assignmentTitle = assignmentTitle;
     }

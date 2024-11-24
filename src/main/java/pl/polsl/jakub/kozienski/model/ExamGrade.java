@@ -46,7 +46,7 @@ public class ExamGrade extends Grade {
      * @param pointsScored The points that were scored in the exam.
      * @throws InvalidGradeException if the grade is invalid.
      */
-    public ExamGrade(String subject, double value, String submissionDate, String examType, int maxPoints, int pointsScored) throws InvalidGradeException {
+    public ExamGrade(Subject subject, double value, String submissionDate, String examType, int maxPoints, int pointsScored) throws InvalidGradeException {
         super(subject, value, submissionDate);
         this.examType = examType;
         this.maxPoints = maxPoints;

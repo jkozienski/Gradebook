@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pl.polsl.jakub.kozienski.gui;
-//test test
+
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import pl.polsl.jakub.kozienski.controller.GradebookController;
 import pl.polsl.jakub.kozienski.view.GradebookView;
 import pl.polsl.jakub.kozienski.model.*;
@@ -18,6 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JFrame;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 
 /**
@@ -43,7 +47,11 @@ public class MyFrame extends javax.swing.JFrame {
         this.model = model;
         this.view = view;
         this.controller = controller;
+        
         initComponents();
+         for (Subject subject : Subject.values()) {
+            subjectComboBox.addItem(subject);
+        }
     }
 
     /**
@@ -69,6 +77,7 @@ public class MyFrame extends javax.swing.JFrame {
         addExamGradeButton = new javax.swing.JButton();
         quitButton = new javax.swing.JButton();
         operationHistory = new javax.swing.JButton();
+        subjectComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dziennik ocen - Jakub Kozieński");
@@ -195,8 +204,9 @@ public class MyFrame extends javax.swing.JFrame {
             }
         });
 
-        operationHistory.setBackground(new java.awt.Color(102, 102, 102));
+        operationHistory.setBackground(new java.awt.Color(0, 86, 86));
         operationHistory.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        operationHistory.setForeground(new java.awt.Color(255, 255, 255));
         operationHistory.setMnemonic('?');
         operationHistory.setText("?");
         operationHistory.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -213,21 +223,26 @@ public class MyFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuPanelLayout.createSequentialGroup()
                 .addGap(100, 100, 100)
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(displayAssignmentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(displayAverageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(displayAllStudentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(addStudentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addExamGradeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addAssignmentGradeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeStudentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(menuPanelLayout.createSequentialGroup()
+                            .addComponent(displayAssignmentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(121, Short.MAX_VALUE))
+                        .addGroup(menuPanelLayout.createSequentialGroup()
+                            .addGap(97, 97, 97)
+                            .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(operationHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(177, Short.MAX_VALUE)))
                     .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(operationHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(100, 100, 100))
+                        .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(displayAverageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(displayAllStudentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(addStudentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addExamGradeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addAssignmentGradeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(removeStudentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(121, Short.MAX_VALUE))))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +253,7 @@ public class MyFrame extends javax.swing.JFrame {
                 .addComponent(addExamGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(addAssignmentGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addComponent(removeStudentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(displayAllStudentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -249,21 +264,34 @@ public class MyFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(operationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(operationHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
+
+        subjectComboBox.setVisible(false);
+        subjectComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subjectComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
         titlePanelLayout.setHorizontalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titlePanelLayout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(titleLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(separator))
-                .addGap(26, 26, 26)
+                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(titlePanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(titleLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                            .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(separator))
+                        .addGap(26, 26, 26))
+                    .addGroup(titlePanelLayout.createSequentialGroup()
+                        .addGap(97, 97, 97)
+                        .addComponent(subjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         titlePanelLayout.setVerticalGroup(
@@ -275,7 +303,9 @@ public class MyFrame extends javax.swing.JFrame {
                 .addComponent(titleLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(subjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
             .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -314,7 +344,7 @@ public class MyFrame extends javax.swing.JFrame {
         if (studentIdStr == null || studentIdStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "ID studenta nie moze byc puste.", "Blad", JOptionPane.ERROR_MESSAGE);
         }
-
+        
         try {
             int studentId = Integer.parseInt(studentIdStr);
             if (controller.getStudentById(studentId) != null) {
@@ -375,6 +405,7 @@ public class MyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_displayAllStudentsButtonActionPerformed
 
     private void addExamGradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExamGradeButtonActionPerformed
+       
         try {
             String studentIdStr = JOptionPane.showInputDialog(this, "Podaj ID studenta:");
             int studentId = Integer.parseInt(studentIdStr);
@@ -382,9 +413,21 @@ public class MyFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Student o podanym ID nie istnieje.", "Blad", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            String subject = JOptionPane.showInputDialog(this, "Podaj przedmiot:");
-
+            
+            subjectComboBox.setVisible(true);
+            Subject selectedSubject = null;
+            int result = JOptionPane.showConfirmDialog(
+                null,
+                subjectComboBox,
+                "Wybierz przedmiot",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+            
+            if (result == JOptionPane.OK_OPTION) {
+                selectedSubject = (Subject) subjectComboBox.getSelectedItem();
+            }
+            
             String gradeValueStr = JOptionPane.showInputDialog(this, "Podaj ocene (np. 4.5):");
             double gradeValue = Double.parseDouble(gradeValueStr);
             if (gradeValue < 1 || gradeValue > 6) {
@@ -409,7 +452,7 @@ public class MyFrame extends javax.swing.JFrame {
             String pointsScoredStr = JOptionPane.showInputDialog(this, "Podaj liczbe zdobytych punktów:");
             int pointsScored = Integer.parseInt(pointsScoredStr);
 
-            controller.addGradeExamToStudent(studentId, subject, gradeValue, submissionDate, examType, maxPoints, pointsScored);
+            controller.addGradeExamToStudent(studentId, selectedSubject, gradeValue, submissionDate, examType, maxPoints, pointsScored);
 
             JOptionPane.showMessageDialog(this, "Ocena egzaminu dodana pomyslnie!");
             model.addOperationHistory("Dodano ocene z egzaminu");
@@ -425,6 +468,7 @@ public class MyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addExamGradeButtonActionPerformed
 
     private void addAssignmentGradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAssignmentGradeButtonActionPerformed
+      
         try {
             String studentIdStr = JOptionPane.showInputDialog(this, "Podaj ID studenta:");
             int studentId = Integer.parseInt(studentIdStr);
@@ -433,7 +477,19 @@ public class MyFrame extends javax.swing.JFrame {
                 return;
             }
 
-            String subject = JOptionPane.showInputDialog(this, "Podaj przedmiot:");
+            subjectComboBox.setVisible(true);
+            Subject selectedSubject = null;
+            int result = JOptionPane.showConfirmDialog(
+                null,
+                subjectComboBox,
+                "Wybierz przedmiot",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+            
+            if (result == JOptionPane.OK_OPTION) {
+                selectedSubject = (Subject) subjectComboBox.getSelectedItem();
+            }
 
             String gradeValueStr = JOptionPane.showInputDialog(this, "Podaj ocene (np. 4.5):");
             double gradeValue = Double.parseDouble(gradeValueStr);
@@ -450,7 +506,7 @@ public class MyFrame extends javax.swing.JFrame {
           
             String assignmentTitle = JOptionPane.showInputDialog(this, "Podaj nazwe zadania:");
 
-            controller.addGradeAssignmentToStudent(studentId, subject, gradeValue, submissionDate, assignmentTitle);
+            controller.addGradeAssignmentToStudent(studentId, selectedSubject, gradeValue, submissionDate, assignmentTitle);
 
             JOptionPane.showMessageDialog(this, "Ocena z zadania dodana pomyslnie!");
             model.addOperationHistory("Dodano ocene z zadania");
@@ -494,8 +550,12 @@ public class MyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void displayAverageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAverageButtonActionPerformed
-        List<Student> students = controller.getAllStudents();
-
+        //List<Student> students = controller.getAllStudents();
+        
+       List<Student> students = controller.getAllStudents().stream()
+        .sorted((student1, student2) -> Double.compare(student2.calculateAverageGrade(), student1.calculateAverageGrade()))
+        .toList();
+        
         String[] columnNames = {"Id", "Imie", "Nazwisko", "Srednia"};
         Object[][] data = new Object[students.size()][4];
 
@@ -569,20 +629,37 @@ public class MyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_displayAssignmentsButtonActionPerformed
 
     private void operationHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationHistoryActionPerformed
-        // TODO add your handling code here:
-    List<OperationHistory> operationHistoryList = model.getOperationHistoryList();
-    
 
-    String[] columnNames = {"Id", "Operacja"};
-    Object[][] data = new Object[operationHistoryList.size()][2];
-     for (int i = 0; i < operationHistoryList.size(); i++) {
-        OperationHistory opHistory = operationHistoryList.get(i);
-        data[i][0] = i;
-        data[i][1] = operationHistoryList;
-     }
-     ///
-     
+        List<OperationHistory> operationHistoryList = model.getOperationHistoryList();
+
+        String[] columnNames = {"Id", "Opis", "Czas wykonania"};
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Object[][] data = new Object[operationHistoryList.size()][3];
+        for (int i = 0; i < operationHistoryList.size(); i++) {
+            OperationHistory operation = operationHistoryList.get(i);
+            data[i][0] = i + 1; 
+            data[i][1] = operation.operation();
+            data[i][2] = operation.timestamp().format(formatter); 
+        }
+
+        JTable table = new JTable(data, columnNames);
+        table.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        JFrame tableFrame = new JFrame("Historia Operacji");
+        tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        tableFrame.add(scrollPane);
+        tableFrame.setSize(500, 200);
+        tableFrame.setLocationRelativeTo(this);
+        tableFrame.setVisible(true);
     }//GEN-LAST:event_operationHistoryActionPerformed
+
+    private void subjectComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectComboBoxActionPerformed
+       
+        
+    }//GEN-LAST:event_subjectComboBoxActionPerformed
 
    /**
      * Parameters for the application: 
@@ -634,7 +711,8 @@ public class MyFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAssignmentGradeButton;
     private javax.swing.JButton addExamGradeButton;
@@ -647,6 +725,7 @@ public class MyFrame extends javax.swing.JFrame {
     private javax.swing.JButton quitButton;
     private javax.swing.JButton removeStudentButton;
     private javax.swing.JSeparator separator;
+    private javax.swing.JComboBox<Subject> subjectComboBox;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel titleLabel1;
     private javax.swing.JPanel titlePanel;

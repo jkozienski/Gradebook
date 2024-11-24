@@ -3,10 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package pl.polsl.jakub.kozienski.model;
-import java.time.LocalDateTime;
 
 /**
- *
- * @author Jakub
+ * Enum representing available school subjects.
  */
-public record OperationHistory(String operation, LocalDateTime timestamp) {}
+public enum Subject {
+    MATEMATYKA,
+    GEOGRAFIA,
+    INFORMATYKA,
+    FIZYKA,
+    CHEMIA,
+    BIOLOGIA,
+    HISTORIA
+}
