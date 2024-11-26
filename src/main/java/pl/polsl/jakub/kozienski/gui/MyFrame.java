@@ -396,7 +396,7 @@ public class MyFrame extends javax.swing.JFrame {
         JFrame tableFrame = new JFrame("Lista studentów z ocenami");
         tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         tableFrame.add(scrollPane);
-        tableFrame.setSize(700, 200);
+        tableFrame.setSize(900, 200);
         tableFrame.setLocationRelativeTo(this);
         tableFrame.setVisible(true);
         
@@ -573,7 +573,7 @@ public class MyFrame extends javax.swing.JFrame {
         JFrame tableFrame = new JFrame("Lista studentów ze srednia ocen");
         tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         tableFrame.add(scrollPane);
-        tableFrame.setSize(700, 200);
+        tableFrame.setSize(900, 200);
         tableFrame.setLocationRelativeTo(this);  
         tableFrame.setVisible(true);
         model.addOperationHistory("Wyswietlono liste srednich ocen");
@@ -606,7 +606,6 @@ public class MyFrame extends javax.swing.JFrame {
         if (assignmentsBuilder.length() > 0) {
             assignmentsBuilder.setLength(assignmentsBuilder.length() - 2);
         }
-
         data[i][3] = assignmentsBuilder.toString();
     }
 
@@ -618,7 +617,7 @@ public class MyFrame extends javax.swing.JFrame {
     JFrame tableFrame = new JFrame("Lista studentów z przypisanymi zadaniami");
     tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     tableFrame.add(scrollPane);
-    tableFrame.setSize(700, 200);
+    tableFrame.setSize(900, 200);
     tableFrame.setLocationRelativeTo(this);  
     tableFrame.setVisible(true);  
     
