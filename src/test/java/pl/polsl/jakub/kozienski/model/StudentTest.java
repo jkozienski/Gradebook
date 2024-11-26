@@ -13,7 +13,7 @@ public class StudentTest {
     @Test
     public void testAddGrade() throws InvalidGradeException {
         Student student = new Student("Jan", "Nowak", 100);
-        Grade grade = new AssignmentGrade(subject.MATEMATYKA, 4.1, "2023-11-19", "ZadanieDom");
+        Grade grade = new AssignmentGrade(subject.MATEMATYKA, 4.1, "2023-11-19", "Obliczanie pola trojkata");
         student.addGrade(grade);
 
         assertEquals(1, student.getGrades().size());
@@ -25,7 +25,7 @@ public class StudentTest {
         Student student = new Student("Jan", "Nowak", 100);
 
         double average = student.calculateAverageGrade();
-
+        
         assertEquals(0.0, average, 0.01, "Srednia powina wynosic 0.0 gdy nie ma zadnych ocen.");
     }
 
