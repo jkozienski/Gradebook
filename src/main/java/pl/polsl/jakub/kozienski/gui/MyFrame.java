@@ -289,7 +289,6 @@ public class MyFrame extends javax.swing.JFrame {
                             .addComponent(separator))
                         .addGap(26, 26, 26))
                     .addGroup(titlePanelLayout.createSequentialGroup()
-                        .addGap(97, 97, 97)
                         .addComponent(subjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,7 +304,7 @@ public class MyFrame extends javax.swing.JFrame {
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(subjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
+                .addContainerGap())
             .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -550,7 +549,6 @@ public class MyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void displayAverageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAverageButtonActionPerformed
-        //List<Student> students = controller.getAllStudents();
         
        List<Student> students = controller.getAllStudents().stream()
         .sorted((student1, student2) -> Double.compare(student2.calculateAverageGrade(), student1.calculateAverageGrade()))
@@ -601,7 +599,7 @@ public class MyFrame extends javax.swing.JFrame {
         for (Grade grade : grades) {
             if (grade instanceof AssignmentGrade) {
                 AssignmentGrade assignmentGrade = (AssignmentGrade) grade;
-                assignmentsBuilder.append(assignmentGrade.getAssignmentTitle()).append(" - ocena: ").append(assignmentGrade.getValue()).append(", ");  
+                assignmentsBuilder.append(assignmentGrade.getSubject()).append(": ").append(assignmentGrade.getAssignmentTitle()).append(" - ocena: ").append(assignmentGrade.getValue()).append(", ");  
             }
         }
 

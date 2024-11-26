@@ -8,6 +8,7 @@ import pl.polsl.jakub.kozienski.view.*;
 import pl.polsl.jakub.kozienski.model.*;
 import java.util.Scanner;
 import java.util.List;
+import lombok.*;
 
 
 /**
@@ -18,6 +19,7 @@ import java.util.List;
  * @author Jakub Kozienski
  * @version 1.0
  */
+@Getter
 public class GradebookController {
 
     /**
