@@ -93,19 +93,6 @@ public double calculateAverageGrade() {
    return roundedAverage.doubleValue();
 }
 
-    /**
-     * Displays all assignment grades for the student.
-     */
-    public void displayAllAssignments() {
-        System.out.println("Zadania studenta " + firstName + " " + lastName + ":");
-        for (Grade grade : grades) {
-            if (grade instanceof AssignmentGrade) {
-                AssignmentGrade assignment = (AssignmentGrade) grade;
-                System.out.println("Zadanie: " + assignment.getAssignmentTitle() + ", Ocena: " + assignment.getValue());
-            }
-        }
-    }
-
 
 /**
      * Provides a string representation of the student, including their ID, name, and average grade.

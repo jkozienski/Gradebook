@@ -3,57 +3,59 @@ package pl.polsl.jakub.kozienski.model;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Unit tests for the Student class
  */
 public class StudentTest {
     private Subject subject;
+    private Student student;
 
-    @Test
-    public void testAddGrade() throws InvalidGradeException {
-        Student student = new Student("Jan", "Nowak", 100);
-        Grade grade = new AssignmentGrade(subject.MATEMATYKA, 4.1, "2023-11-19", "Obliczanie pola trojkata");
-        student.addGrade(grade);
-
-        assertEquals(1, student.getGrades().size());
-        assertEquals(grade, student.getGrades().get(0));
+    
+    @BeforeEach
+    public void setUp() {
+       student = new Student("Jan", "Nowak", 100);
     }
 
+    
     @Test
-    public void testCalculateAverageGrade_NoGrades() {
-        Student student = new Student("Jan", "Nowak", 100);
-
+    public void testCalculateAverageGradeNoGrades() {
         double average = student.calculateAverageGrade();
         
         assertEquals(0.0, average, 0.01, "Srednia powina wynosic 0.0 gdy nie ma zadnych ocen.");
     }
 
-    @Test
-    public void testCalculateAverageGrade_WithGrades() throws InvalidGradeException {
-        Student student = new Student("Jan", "Nowak", 100);
-        student.addGrade(new AssignmentGrade(subject.FIZYKA, 5.0, "2024-11-19", "ZadanieDom"));
-        student.addGrade(new ExamGrade(subject.BIOLOGIA, 5.0, "2024-11-20", "Koncowy", 100, 90));
+    @ParameterizedTest
+    @CsvSource({
+        "5.0, 4.0, 3.0, 4.0",
+        "2.0, 2.0, 2.0, 2.0",
+        "6.0, 5.0, 4.0, 5.0"
+    })
+    void testCalculateAverageGrade(double grade1, double grade2, double grade3, double expected) 
+        throws InvalidGradeException {
+        student.addGrade(new Grade(Subject.MATEMATYKA, grade1, "2024-01-01"));
+        student.addGrade(new Grade(Subject.FIZYKA, grade2, "2024-01-02"));
+        student.addGrade(new Grade(Subject.CHEMIA, grade3, "2024-01-03"));
 
-        double average = student.calculateAverageGrade();
-
-        assertEquals(5.0, average, 0.01, "Average grade should be calculated correctly.");
+        assertEquals(expected, student.calculateAverageGrade(), 0.01);
     }
-
-
-    @Test
-    public void testToString() throws InvalidGradeException {
-        Student student = new Student("Jan", "Nowak", 100);
-        student.addGrade(new AssignmentGrade(subject.FIZYKA, 3.0, "2024-11-19", "ZadanieDom"));
-        student.addGrade(new ExamGrade(subject.BIOLOGIA, 3.0, "2024-11-20", "Koncowy", 100, 55));
-
-        String result = student.toString();
-
-        assertTrue(result.contains("Jan"));
-        assertTrue(result.contains("Nowak"));
-        assertTrue(result.contains("100"));
-        assertTrue(result.contains("3.0"));
+    
+    @ParameterizedTest
+    @CsvSource({
+        "Jan, Kowalski, 1, 'ID: 1, Imie: Jan, Nazwisko: Kowalski, srednia: 0.0'",
+        "Anna, Nowak, 2, 'ID: 2, Imie: Anna, Nazwisko: Nowak, srednia: 0.0'",
+        "Piotr, Wisniewski, 3, 'ID: 3, Imie: Piotr, Nazwisko: Wisniewski, srednia: 0.0'"
+    })
+    void testToString(String firstName, String lastName, int id, String expected) {
+        Student testStudent = new Student(firstName, lastName, id);
+        assertEquals(expected, testStudent.toString());
     }
-
    
 }
+
+

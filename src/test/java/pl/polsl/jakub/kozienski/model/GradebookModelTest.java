@@ -4,17 +4,38 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Unit tests for the GradebookModel class.
+ * - Testing history operations.
+ * - Testing adding students.
+ * - Testing removing existing and non existing students.
+ * - Testing adding grades to existing and non existing students.
  */
 public class GradebookModelTest {
 
-    @Test
-    public void testAddOperationHistory() {
-        GradebookModel model = new GradebookModel();
-        String operationDescription = "Dodano studenta";
-
+    private GradebookModel model;
+    private Student student;
+    
+    @BeforeEach
+    public void setUp() {
+       model = new GradebookModel();
+       student = new Student("Jan", "Nowak", 100);
+    }
+    
+   @ParameterizedTest
+    @CsvSource({
+        "Dodano studenta",
+        "Usunieto studenta",
+        "Dodano ocene z egzaminu",
+        "Dodano ocene z zadania"
+    })
+    void testAddOperationHistory(String operationDescription) {
         model.addOperationHistory(operationDescription);
 
         List<OperationHistory> history = model.getOperationHistoryList();
@@ -23,88 +44,97 @@ public class GradebookModelTest {
         assertNotNull(history.get(0).timestamp());
     }
 
-    @Test
-    public void testAddStudent() {
-        GradebookModel model = new GradebookModel();
-        Student student = new Student("Jan", "Nowak", 100);
-
+   @ParameterizedTest
+   @CsvSource({
+        "Jan, Kowalski, 1",
+        "Anna, Nowak, 2",
+        "Piotr, Tomczak, 3"
+    })
+    void testAddStudent(String firstName, String lastName, int id) {
+        Student student = new Student(firstName, lastName, id);
+        
         model.addStudent(student);
-
-        List<Student> students = model.getStudents();
-        assertEquals(1, students.size());
-        assertEquals(student, students.get(0));
+        
+        assertEquals(student, model.getStudentById(id));
     }
 
-    @Test
-    public void testRemoveStudentById_ExistingStudent() {
-        GradebookModel model = new GradebookModel();
-        Student student = new Student("Jan", "Nowak", 100);
-        model.addStudent(student);
-
-        boolean removed = model.removeStudentById(100);
-
+    @ParameterizedTest
+    @ValueSource(ints = {100, 200, 300})
+    void testRemoveExistingStudent(int studentId) {
+        Student existingStudent = new Student("Test", "Student", studentId);
+        model.addStudent(existingStudent);
+        boolean removed = model.removeStudentById(studentId);
         assertTrue(removed);
-        assertNull(model.getStudentById(100));
+        assertNull(model.getStudentById(studentId));
     }
 
-    @Test
-    public void testRemoveStudentById_NonExistingStudent() {
-        GradebookModel model = new GradebookModel();
-
-        boolean removed = model.removeStudentById(999);
+    @ParameterizedTest
+    @ValueSource(ints = {-1,0, 9999})
+    public void testRemoveNonExistingStudent(int invalidId) {
+        boolean removed = model.removeStudentById(invalidId);
 
         assertFalse(removed);
     }
+        
+    @ParameterizedTest
+    @CsvSource({
+        "100, MATEMATYKA, 4.5, 2024-11-20, Zadanie domowe",
+        "101, FIZYKA, 5.0, 2024-11-21, Projekt",
+        "102, INFORMATYKA, 3.5, 2024-11-22, Laboratorium"
+    })
+    public void testAddAssignmentGradeToExistingStudent(int studentId, Subject subject, double value, String date, String title) {
+        Student testStudent = new Student("Test", "Student", studentId);
+        model.addStudent(testStudent);
 
-    @Test
-    public void testAddGradeAssignmentToStudent_ValidData() {
-        GradebookModel model = new GradebookModel();
-        Student student = new Student("Jan", "Nowak", 100);
-        model.addStudent(student);
+        model.addGradeAssignmentToStudent(studentId, subject, value, date, title);
 
-        model.addGradeAssignmentToStudent(100, Subject.MATEMATYKA, 4.5, "2024-11-20", "Zadanie domowe");
-
-        List<Grade> grades = student.getGrades();
+        List<Grade> grades = testStudent.getGrades();
         assertEquals(1, grades.size());
         assertTrue(grades.get(0) instanceof AssignmentGrade);
         AssignmentGrade grade = (AssignmentGrade) grades.get(0);
-        assertEquals("Zadanie domowe", grade.getAssignmentTitle());
-        assertEquals(4.5, grade.getValue(), 0.01);
+        assertEquals(title, grade.getAssignmentTitle());
+        assertEquals(value, grade.getValue(), 0.01);
     }
 
-    @Test
-    public void testAddGradeAssignmentToStudent_NonExistingStudent() {
-        GradebookModel model = new GradebookModel();
-
-        model.addGradeAssignmentToStudent(99999, Subject.MATEMATYKA, 4.5, "2024-11-20", "Zadanie domowe");
-
+  
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0, 999999})
+    void testAddAssignmentGradeToNonExistingStudent(int invalidId) {
+        model.addGradeAssignmentToStudent(invalidId, Subject.MATEMATYKA, 4.5, "2024-11-20", "Zadanie domowe");
+        
         assertTrue(model.getStudents().isEmpty());
     }
 
-    @Test
-    public void testAddGradeExamToStudent_ValidData() {
-        GradebookModel model = new GradebookModel();
-        Student student = new Student("Jan", "Nowak", 100);
-        model.addStudent(student);
+    @ParameterizedTest
+    @CsvSource({
+        "100, FIZYKA, 5.0, 2024-11-21, Koncowy, 100, 85",
+        "101, MATEMATYKA, 4.0, 2024-11-22, Poprawkowy, 50, 40",
+        "102, CHEMIA, 3.5, 2024-11-23, Zaliczeniowy, 30, 20"
+    })
+    public void testAddGradeExamToStudentValidData(int studentId, Subject subject, double value, String date, String examType, int maxPoints, int pointsScored) {
+        Student testStudent = new Student("Test", "Student", studentId);
+           
+        model.addStudent(testStudent);
 
-        model.addGradeExamToStudent(100, Subject.FIZYKA, 5.0, "2024-11-21", "Koncowy", 100, 85);
+        model.addGradeExamToStudent(studentId, subject, value, date, examType, maxPoints, pointsScored);
 
-        List<Grade> grades = student.getGrades();
+        List<Grade> grades = testStudent.getGrades();
         assertEquals(1, grades.size());
         assertTrue(grades.get(0) instanceof ExamGrade);
         ExamGrade grade = (ExamGrade) grades.get(0);
-        assertEquals("Koncowy", grade.getExamType());
-        assertEquals(5.0, grade.getValue(), 0.01);
-        assertEquals(85, grade.getPointsScored());
-        assertEquals(100, grade.getMaxPoints());
+        assertEquals(examType, grade.getExamType());
+        assertEquals(value, grade.getValue(), 0.01);
+        assertEquals(pointsScored, grade.getPointsScored());
+        assertEquals(maxPoints, grade.getMaxPoints());
     }
 
-    @Test
-    public void testAddGradeExamToStudent_NonExistingStudent() {
-        GradebookModel model = new GradebookModel();
-
-        model.addGradeExamToStudent(999999, Subject.FIZYKA, 5.0, "2024-11-21", "Koncowy", 100, 85);
-
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0, 999999})
+    void testAddExamGradeToNonExistingStudent(int invalidId) {
+        model.addGradeExamToStudent(invalidId, Subject.FIZYKA, 5.0, "2024-11-21", "Koncowy", 100, 85);
+        
         assertTrue(model.getStudents().isEmpty());
     }
 }
+
+
